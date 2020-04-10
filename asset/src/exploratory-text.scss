@@ -1,0 +1,138 @@
+$dark: #072605;
+$medium: lighten($dark, 20%);
+$highlight: #0dae0b;
+$light: #f2f0df;
+$lighter: #fffbf8;
+
+$context: #ffb5bb;
+$person: #8ab3fe;
+$document: #fff550;
+
+.exploratory-text-block {
+	position: relative;
+	padding-top: 1rem;
+	border-top: 1px solid $dark;
+	background: $light;
+	svg {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 1;
+		path {
+			stroke: $dark;
+			&:not(.visible):not(.selected) {
+				opacity: 0;
+			}
+		}
+	}
+	.exploratory-text-side {
+		width: 100%;
+		position: relative;
+		.exploratory-text-side-inner {
+			width: 100%;
+			position: absolute;
+			left: 0;
+			top: 1rem;
+			z-index: 2;
+			overflow-y: scroll;
+			-webkit-overflow-scrolling: touch;
+		}
+		&.fixed .exploratory-text-side-inner {
+			position: fixed;
+			left: 0;
+			top: 0;
+		}
+		.exploratory-text-panel {
+			width: 100%;
+			border: solid $dark;
+			border-width: 1px 1px 0 1px;
+			&:last-child {
+				border-bottom-width: 1px;
+			}
+		}
+		details {
+			padding: 3px 6px;
+		}
+		summary.title {
+			padding: 3px 6px;
+			margin-left: -6px;
+			margin-right: -6px;
+			&:hover {
+				cursor: pointer;
+			}
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+	.exploratory-text-inner {
+		position: relative;
+		z-index: 2;
+		line-height: 35px;
+	}
+	p {
+		&:first-of-type {
+			margin-top: 0;
+		}
+	}
+	a {
+		padding: 3px 6px;
+		background: $highlight;
+		border: 1px solid transparent;
+		position: relative;
+		&:hover, &.selected, &.visible {
+			cursor: pointer;
+			border-color: $dark;
+		}
+		.anchor {
+			padding-left: 6px;
+			margin-left: -6px;
+		}
+	}
+	.context {
+		background: rgba($context, .75);
+		&:hover, &.selected {
+			background: $context;
+		}
+	}
+	.person {
+		background: rgba($person, .75);
+		&:hover, &.selected {
+			background: $person;
+		}
+	}
+	.document {
+		background: rgba($document, .75);
+		&:hover, &.selected {
+			background: $document;
+		}
+	}
+}
+
+.exploratory-text-panel.hidden {
+	display: none !important;
+}
+
+.context {
+	color: $dark !important;
+	background-color: rgba($context, .75);
+	&:hover, &.selected {
+		background-color: $context;
+	}
+}
+.person {
+	color: $dark !important;
+	background-color: rgba($person, .75);
+	&:hover, &.selected {
+		background-color: $person;
+	}
+}
+.document {
+	color: $dark !important;
+	background-color: rgba($document, .75);
+	&:hover, &.selected {
+		background-color: $document;
+	}
+}
