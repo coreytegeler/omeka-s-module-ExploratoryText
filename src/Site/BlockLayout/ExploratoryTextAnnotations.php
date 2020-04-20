@@ -20,7 +20,7 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 {
 	public function getLabel()
 	{
-		return 'Exploratory Text Annotations'; // @translate
+		return 'Exploratory Text (Annotation)'; // @translate
 	}
 
 	public function prepareForm( PhpRenderer $view )
@@ -32,16 +32,32 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 	 ) {
 		$html = '';
 
-		$titleInput = new Text( 'o:block[__blockIndex__][o:data][title]' );
-		$titleInput->setOptions([
-			'label' => 'Title',
+		$highlightInput = new Text( 'o:block[__blockIndex__][o:data][highlight]' );
+		$highlightInput->setOptions([
+			'label' => 'Highlighted Text',
+		]);
+		$highlightValue = $block ? $block->dataValue('highlight') : null;
+		$highlightInput->setAttributes([
+			'value' => $highlightValue,
+		]);
+		$html .= $view->formRow($highlightInput);
+
+		$typeSelect = new Select("o:block[__blockIndex__][o:data][type]");
+		$typeSelect->setOptions([
+			'label' => 'Annotation Type',
 			'info' => '',
 		]);
-		$titleValue = $block ? $block->dataValue('title') : null;
-		$titleInput->setAttributes([
-			'value' => $titleValue,
+		$typeSelect->setValueOptions([
+			'context' => 'Context',
+			'entity' => 'Entity',
+			'primary' => 'Primary',
+			'secondary' => 'Secondary',
 		]);
-		$html .= $view->formRow($titleInput);
+		$typeValue = $block ? $block->dataValue('type') : null;
+		$typeSelect->setAttributes([
+			'value' => $typeValue
+		]);
+		$html .= $view->formRow($typeSelect);
 
 
 		$bodyTextarea = new Textarea( 'o:block[__blockIndex__][o:data][body]' );
@@ -55,6 +71,8 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 			'class' => 'block-html full wysiwyg'
 		]);
 		$html .= $view->formRow($bodyTextarea);
+
+		$html .= $view->blockAttachmentsForm($block);
 		
 		return $html;
 

@@ -1,6 +1,21 @@
-<div class="exploratory-text-panel hidden" data-id="">
-	<details>
-		<summary class="title"><?= $block->dataValue( 'title' ); ?></summary>
-		<?= $block->dataValue( 'body' ); ?>
-	</details>
-</div>
+<?php if( $block->dataValue( 'body' ) ) { ?>
+	<div class="et-annot" data-highlight="<?= $block->dataValue( 'highlight' ); ?>" data-type="<?= $block->dataValue( 'type' ); ?>">
+		<div class="et-annot-inner">
+			<div class="et-annot-toolbar">
+				<!-- <div class="et-annot-type"><?#= $block->dataValue( 'type' ); ?></div> -->
+				<div class="et-annot-index"></div>
+				<div class="et-gap"></div>
+				<button class="et-annot-toggle" name="Toggle annotation size">
+					<div>&plus;</div>
+					<div>&minus;</div>
+				</button>
+				<button class="et-annot-close" name="Close annot">
+					<div>&times;</div>
+				</button>
+			</div>
+			<div class="et-annot-body">
+				<?= $block->dataValue( 'body' ); ?>
+			</div>
+		</div>
+	</div>
+<?php } ?>

@@ -1,5 +1,5 @@
 <?php
-namespace ExploratoryMap\View\Helper;
+namespace ExploratoryText\View\Helper;
 
 use Omeka\Api\Representation\SitePageBlockRepresentation;
 use Omeka\View\Helper\BlockAttachmentsForm;

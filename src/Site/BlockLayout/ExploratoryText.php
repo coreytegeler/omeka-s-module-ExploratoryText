@@ -20,7 +20,7 @@ class ExploratoryText extends AbstractBlockLayout
 {
 	public function getLabel()
 	{
-		return 'Exploratory Text'; // @translate
+		return 'Exploratory Text (Primary)'; // @translate
 	}
 
 	public function prepareForm( PhpRenderer $view )
@@ -42,7 +42,7 @@ class ExploratoryText extends AbstractBlockLayout
 			'value' => $bodyValue,
 			'class' => 'block-html full wysiwyg'
 		]);
-		$html .= $view->formRow($bodyInput);
+		$html .= '<div class="et-inner">' . $view->formRow($bodyInput) . '</div>';
 		
 		return $html;
 

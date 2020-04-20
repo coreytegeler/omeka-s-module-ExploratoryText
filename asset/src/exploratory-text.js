@@ -12,198 +12,234 @@ class ExploratoryText {
 		this.block = document.querySelector(this.options.selector);
 		if(!this.block) console.warn("No element matched the selector \""+this.options.selector+"\"");
 		this.svg = d3.select(this.block).append("svg");
-		this.links = this.block.querySelectorAll(".exploratory-text-inner a");
-		this.side = this.block.querySelector(".exploratory-text-side");
-		this.panels = document.querySelectorAll(".exploratory-text-panel");
+		this.side = this.block.querySelector(".et-side");
+		this.sideInner = this.side.querySelector(".et-side-inner");
+		this.nav = document.querySelector("nav.fixed");
+		this.highlights = [];
+		this.annots = [];
 		this.paths = [];
 		this.init();
 	}
 
 
 
-	drawConnection(context, link, panel, path) {
-		if(!link || !panel || !path) return;
-		const title = panel.querySelector(".title"),
-					anchor = link.querySelector(".anchor"),
+	drawConnection(context, highlight, annot, path) {
+		if(!highlight || !annot || !path) return;
+		const first = highlight.querySelector(".et-first"),
 					blockBounds = this.block.getBoundingClientRect(),
-					anchorBounds = anchor.getBoundingClientRect(),
-					panelBounds = panel.getBoundingClientRect(),
-					titleBounds = title.getBoundingClientRect(),
+					firstBounds = first.getBoundingClientRect(),
+					annotBounds = annot.getBoundingClientRect(),
 					scrollTop = document.documentElement.scrollTop,
-					titleX = titleBounds.right - blockBounds.left,
-					titleY = titleBounds.y + titleBounds.height/2 - blockBounds.top,
-					anchorX = anchorBounds.left - blockBounds.left,
-					anchorY = anchorBounds.y + anchorBounds.height/2 - blockBounds.top;
-		context.moveTo(titleX, titleY);
-		context.lineTo(anchorX, anchorY);
+					annotX = annotBounds.right - blockBounds.left,
+					annotY = annotBounds.y + annotBounds.height/2 - blockBounds.top,
+					firstX = firstBounds.left - blockBounds.left,
+					firstY = firstBounds.y + firstBounds.height/2 - blockBounds.top;
+		context.moveTo(annotX, annotY);
+		context.lineTo(firstX, firstY);
 		return context;
 	}
 
 	makeConnections() {
-		const self = this,
-					width = this.block.clientWidth,
-					height = this.block.clientHeight;
-		this.svg.attr("width", width)
-						.attr("height", height);
+		// const self = this,
+		// 			width = this.block.clientWidth,
+		// 			height = this.block.clientHeight;
+		// this.svg.attr("width", width)
+		// 				.attr("height", height);
 		
-		this.links.forEach(function(link, i) {
+		this.highlights.forEach(function(highlight, i) {
+		// 	let annot = self.annots[i],
+		// 			path = self.paths[i];
 
-			let panel = self.panels[i],
-					path = self.paths[i];
-			if(!path) {
-				path = self.svg.append("path");
-				path.attr("data-index", i);
-				self.paths.push(path);
-			}
-
-			if(!link.querySelector(".anchor")) {
-				let linkStr = link.innerText,
-						textArr = linkStr.split(" ");
-				textArr[0] = "<span class='anchor'>"+textArr[0]+"</span>";
-				link.innerHTML = textArr.join(" ");
-			}
-			path.classed(link.getAttribute("class"), true);
-			path.attr("d", self.drawConnection(d3.path(), link, panel, path));
+		// 	if(!path) {
+		// 		path = self.svg.append("path");
+		// 		path.attr("data-index", i);
+		// 		self.paths.push(path);
+		// 	}
+			// path.attr("d", self.drawConnection(d3.path(), highlight, annot, path));
 		});
 	};
 
-	selectConnection(i) {
-		let panel = this.panels[i],
-				link = this.links[i],
-				path = this.paths[i];
-		if(panel) {
-			let details = panel.querySelector("details");
-			panel.classList.toggle("selected");
-			details.open = !details.open;
-		}
-		if(link) link.classList.toggle("selected");
-		if(path) path.classed("selected", !path.classed("selected"));
+	selectAnnotation(index) {
+		let annot = this.annots[index],
+				highlight = this.highlights[index],
+				path = this.paths[index];
+		if(annot) annot.classList.add("selected");
+		if(highlight) highlight.classList.add("selected");
+		
+		this.scrollTo(index);
 		this.makeConnections();
 	}
 
-	showConnection(i) {
-		let panel = this.panels[i],
-				link = this.links[i],
-				path = this.paths[i];
+	showConnection(index) {
+		let annot = this.annots[index],
+				highlight = this.highlights[index],
+				path = this.paths[index];
 
-		if(panel) panel.classList.add("visible");
-		if(link) link.classList.add("visible");
-		if(path) path.classed("visible", true);
+		if(!annot) return;
+		if(!highlight) return;
+
+		if(!annot.classList.contains("selected")) return;
+		if(!highlight.classList.contains("selected")) return;
+		annot.classList.add("preview");
+		highlight.classList.add("preview");
+		// if(path) path.classed("preview", true);
 		this.makeConnections();
 	}
 
-	hideConnection(i) {
-		let panel = this.panels[i],
-				link = this.links[i],
-				path = this.paths[i];
+	hideConnection(index) {
+		let annot = this.annots[index],
+				highlight = this.highlights[index],
+				path = this.paths[index];
 
-		if(panel) panel.classList.remove("visible");
-		if(link) link.classList.remove("visible");
-		if(path) path.classed("visible", false);
+		// if(annot) annot.classList.remove("preview");
+		// if(highlight) highlight.classList.remove("preview");
+		// if(path) path.classed("preview", false);
 		this.makeConnections();
 	};
 
-	positionPanels(e) {
-		const side = this.block.querySelector(".exploratory-text-side"),
-					supportPageOffset = window.pageXOffset !== undefined,
-					isCSS1Compat = ((document.compatMode || "") === "CSS1Compat"),
-					scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop,
-					blockBounds = this.block.getBoundingClientRect(),
-					blockY = blockBounds.y,
+	scrollTo(i) {
+		const annot = this.annots[i],
 					nav = document.querySelector("nav.fixed"),
-					navBounds = nav.getBoundingClientRect(),
-					navY = navBounds.y;
-		
-		if(blockY <= navY) {
-			side.classList.add("fixed");
-		} else {
-			side.classList.remove("fixed")
-		}
+					sideInner = this.block.querySelector(".et-side-inner");
+		if(!annot) return;
+		const annotBounds = annot.getBoundingClientRect(),
+					sideBounds = sideInner.getBoundingClientRect(),
+					navBounds = nav.getBoundingClientRect();
+		sideInner.scrollBy({
+			top: annotBounds.top - navBounds.height,
+			behavior: "smooth"
+		});
+	}
 
-		// var mainHeaderHeight = $mainHeader.outerHeight(),
-	//       mainHeaderTop = $mainHeader.offset().top,
-	//       mainHeaderBottom = mainHeaderTop + mainHeaderHeight,
-	//       fixedNavHeight = $fixedNav.outerHeight(),
-	//       scrollTop = $(window).scrollTop();
-		// if(scrollTop >= mainHeaderBottom - fixedNavHeight) {
-		// 	$body.addClass('fix-nav');
-		// 	if ($sideNav.length) {
-		// 		var sideNavHeight = $sideNav.innerHeight(),
-		// 				sideNavWidth = $sideNavParent.innerWidth(),
-		// 				sideNavLeft = $sideNavParent.offset().left;
-		// 		$sideNav.css({
-		// 			width: sideNavWidth,
-		// 			left: sideNavLeft,
-		// 			top: fixedNavHeight
-		// 		});
-		// 		$sideNavParent.css({
-		// 			height: sideNavHeight
-		// 		});
-		// 	}
-		// } else {
-		// 	$body.removeClass('fix-nav');
-		// 	if ($sideNav.length) {
-		// 		$sideNav.attr('style', '');
-		// 		$sideNavParent.attr('style', '');
-		// 	}
-		// }
+	positionAnnotations(e) {
+		const blockBounds = this.block.getBoundingClientRect(),
+					navBounds = this.nav.getBoundingClientRect(),
+					sideBounds = this.side.getBoundingClientRect();
+			
+		this.sideInner.style.width = sideBounds.width + "px";
+		this.side.style.height = (this.sideInner.scrollHeight + sideBounds.top) + "px";
+		if(blockBounds.y <= navBounds.height) {
+			this.sideInner.style.height = window.innerHeight - navBounds.height + "px";;
+			this.sideInner.style.position = "fixed";
+			this.sideInner.style.left = sideBounds.x + "px";
+			this.sideInner.style.top = navBounds.height + "px";
+		} else {
+			this.sideInner.style.position = "absolute";
+			this.sideInner.style.left = "";
+			this.sideInner.style.top = "";
+		}
+	}
+
+	resizeAnnotation(annot) {
+		annot.classList.toggle("et-less");
+	}
+
+	unselectAnnotation(annot) {
+		const index = annot.dataset.index,
+					highlight = this.highlights[index];
+		annot.classList.remove("selected");
 	}
 
 	init() {
 		const self = this,
-					sideInner = document.querySelector(".exploratory-text-side-inner");
+					sideInner = document.querySelector(".et-side-inner"),
+					highlightElems = this.block.querySelectorAll(".et-inner a"),
+					annotElems = document.querySelectorAll(".et-annot"),
+					pathElems = [];
+		let highlightIndex = 0;
 
-		this.panels.forEach((panel, i) => {
+		annotElems.forEach((annot, i) => {
+			const annotBody = annot.querySelector(".et-annot-body"),
+						annotIndex = annot.querySelector(".et-annot-index"),
+						annotToggle = annot.querySelector(".et-annot-toggle"),
+						annotClose = annot.querySelector(".et-annot-close");
+			annot = sideInner.appendChild(annot);
 
-			panel = sideInner.appendChild(panel);
-			panel.dataset.index = i;
+			const highlightStr = annot.dataset.highlight;
 
-			let summary = panel.querySelector("summary");
-			summary.onclick = function(e) {
-				e.preventDefault();
-				let index = panel.dataset.index;
-				self.selectConnection(index);
-			}
+			highlightElems.forEach(function(highlight, i) {
+				if(highlightStr === highlight.innerText) {
+					const type = annot.dataset.type;
+					highlight.classList.add("et-highlight");
+					highlight.dataset.type = type;
+					highlight.dataset.index = highlightIndex;
+					annot.dataset.index = highlightIndex;
+					annotIndex.innerText = highlightIndex + 1;
+					self.annots.push(annot);
+					self.highlights.push(highlight);
+				}
+			});
 
-			summary.onmouseover = function(e) {
-				let index = panel.dataset.index;
+			// annot.onclick = function(e) {
+			// 	e.preventDefault();
+			// 	let index = annot.dataset.index;
+			// 	self.selectAnnotation(index);
+			// }
+
+			annot.onmouseover = function(e) {
+				let index = annot.dataset.index;
 				self.showConnection(index);
 			}
 
-			summary.onmouseleave = function(e) {
-				let index = panel.dataset.index;
+			annot.onmouseleave = function(e) {
+				let index = annot.dataset.index;
 				self.hideConnection(index);
 			}
 
-			panel.classList.remove("hidden");
+			annotToggle.onclick = function(e) {
+				self.resizeAnnotation(annot);
+			}
+
+			annotClose.onclick = function(e) {
+				self.unselectAnnotation(annot);
+			}
+
+			annot.classList.remove("hidden");
+			highlightIndex++;
 
 		});
 
+		highlightElems.forEach(function(highlight, i) {
 
-		this.links.forEach(function(link, i) {
-
-			const type = link.getAttribute("class"),
-						panel = self.panels[i];
+			const type = highlight.dataset.type,
+						index = highlight.dataset.index,
+						annot = self.annots[index];
 			
-			if(panel) panel.classList.add(type);
+			if(annot) annot.classList.add(type);
 
-			link.dataset.index = i;
+			let highlightStr = highlight.innerText,
+					highlightIndex = parseInt(highlight.dataset.index),
+					textArr = highlightStr.split(" "),
+					textLen = textArr.length;
 
-			link.onclick = function(e) {
-				e.preventDefault();
-				let index = link.dataset.index;
-				self.selectConnection(index);
+			if(isNaN(highlightIndex)) {
+				highlight.setAttribute("class", "inactive");
+			} else {
+				if(textArr.length > 1) {
+					textArr[0] = "<span class='et-first'>"+textArr[0]+"</span>";
+					textArr[textLen-1] = "<span class='et-last' data-index-label='"+(highlightIndex + 1)+"'>"+textArr[textLen-1]+"</span>";
+				} else {
+					textArr[0] = "<span class='et-first et-last' data-index-label='"+(highlightIndex + 1)+"'>"+textArr[0]+"</span>";
+				}
+				highlight.innerHTML = textArr.join(" ");
 			}
 
-			link.onmouseover = function(e) {
-				let index = link.dataset.index;
+			highlight.onclick = function(e) {
+				e.preventDefault();
+				let index = highlight.dataset.index;
+				self.selectAnnotation(index);
+			}
+
+			highlight.onmouseover = function(e) {
+				let index = highlight.dataset.index;
 				self.showConnection(index);
 			}
 
-			link.onmouseleave = function(e) {
-				let index = link.dataset.index;
+			highlight.onmouseleave = function(e) {
+				let index = highlight.dataset.index;
 				self.hideConnection(index);
 			}
+
 		});
 
 		this.side.onscroll = function(e) {
@@ -211,17 +247,17 @@ class ExploratoryText {
 		}
 
 		window.onscroll = function(e) {
+			self.positionAnnotations();
 			self.makeConnections();
-			self.positionPanels();
 		}
 
 		window.onresize = function(e) {
+			self.positionAnnotations();
 			self.makeConnections();
-			self.positionPanels();
 		}
 
+		this.positionAnnotations();
 		this.makeConnections();
-		this.positionPanels();
 	}
 
 };
