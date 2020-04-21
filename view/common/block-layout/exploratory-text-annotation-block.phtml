@@ -13,9 +13,23 @@
 					<div>&times;</div>
 				</button>
 			</div>
-			<div class="et-annot-body">
+
+			<?php if( $reference && $reference['image'] ) { ?>
+				<div class="et-annot-images">
+					<?= $reference['image'] ?>
+				</div>
+			<?php	} ?>
+
+			<div class="et-annot-row et-annot-body">
 				<?= $block->dataValue( 'body' ); ?>
 			</div>
+
+			<?php if( $reference && $reference['link'] ) { ?>
+				<div class="et-annot-row et-annot-ref">
+					<?= $reference['link'] ?>
+				</div>
+			<?php } ?>
+
 		</div>
 	</div>
 <?php } ?>

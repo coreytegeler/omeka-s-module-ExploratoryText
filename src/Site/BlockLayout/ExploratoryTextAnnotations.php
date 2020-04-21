@@ -80,13 +80,25 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 
 	public function render( PhpRenderer $view, SitePageBlockRepresentation $block )
 	{
-		// $view->headLink()->appendStylesheet( $view->assetUrl( 'exploratory-text-public.css', 'ExploratoryText' ) );
-		// $view->headScript()->appendFile( 'https://d3js.org/d3.v5.min.js', 'text/javascript' );
-		// $view->headScript()->appendFile( $view->assetUrl( 'exploratory-text-public.js', 'ExploratoryText' ), 'text/javascript' );
+		$attachments = $block->attachments();
+		$reference = array();
+		if( sizeof( $attachments ) ) {
+			$attachment = $attachments[0];
+			$item = $attachment->item();
+			if($item) {
+				$reference['link'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
 
+				$media = $attachment->media() ?: $item->primaryMedia();
+				if( $media ) {
+					$reference['image'] = $view->thumbnail( $media, 'medium' );
+					// $marker['filename'] = $media->displayTitle();
+				}
+			}
+		}
 
 		return $view->partial( 'common/block-layout/exploratory-text-annotation-block', [
 			'block' => $block,
+			'reference' => $reference
 		]);
 	}
 }

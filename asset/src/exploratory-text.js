@@ -15,9 +15,9 @@ class ExploratoryText {
 		this.side = this.block.querySelector(".et-side");
 		this.sideInner = this.side.querySelector(".et-side-inner");
 		this.nav = document.querySelector("nav.fixed");
-		this.highlights = [];
-		this.annots = [];
-		this.paths = [];
+		this.highlights = [null];
+		this.annots = [null];
+		this.paths = [null];
 		this.init();
 	}
 
@@ -39,14 +39,14 @@ class ExploratoryText {
 		return context;
 	}
 
-	makeConnections() {
+	// makeConnections() {
 		// const self = this,
 		// 			width = this.block.clientWidth,
 		// 			height = this.block.clientHeight;
 		// this.svg.attr("width", width)
 		// 				.attr("height", height);
 		
-		this.highlights.forEach(function(highlight, i) {
+		// this.highlights.forEach(function(highlight, i) {
 		// 	let annot = self.annots[i],
 		// 			path = self.paths[i];
 
@@ -56,19 +56,8 @@ class ExploratoryText {
 		// 		self.paths.push(path);
 		// 	}
 			// path.attr("d", self.drawConnection(d3.path(), highlight, annot, path));
-		});
-	};
-
-	selectAnnotation(index) {
-		let annot = this.annots[index],
-				highlight = this.highlights[index],
-				path = this.paths[index];
-		if(annot) annot.classList.add("selected");
-		if(highlight) highlight.classList.add("selected");
-		
-		this.scrollTo(index);
-		this.makeConnections();
-	}
+	// 	});
+	// };
 
 	showConnection(index) {
 		let annot = this.annots[index],
@@ -83,7 +72,7 @@ class ExploratoryText {
 		annot.classList.add("preview");
 		highlight.classList.add("preview");
 		// if(path) path.classed("preview", true);
-		this.makeConnections();
+		// this.makeConnections();
 	}
 
 	hideConnection(index) {
@@ -94,7 +83,7 @@ class ExploratoryText {
 		// if(annot) annot.classList.remove("preview");
 		// if(highlight) highlight.classList.remove("preview");
 		// if(path) path.classed("preview", false);
-		this.makeConnections();
+		// this.makeConnections();
 	};
 
 	scrollTo(i) {
@@ -109,6 +98,28 @@ class ExploratoryText {
 			top: annotBounds.top - navBounds.height,
 			behavior: "smooth"
 		});
+	}
+
+	selectAnnotation(index) {
+		let annot = this.annots[index],
+				highlight = this.highlights[index],
+				path = this.paths[index];
+		if(annot) annot.classList.add("selected");
+		if(highlight) highlight.classList.add("selected");
+
+		this.scrollTo(index);
+		this.side.classList.remove("et-side-empty");
+		// this.makeConnections();
+	}
+
+	unselectAnnotation(annot) {
+		const index = annot.dataset.index,
+					highlight = this.highlights[index];
+		annot.classList.remove("selected");
+
+		if(!this.side.querySelectorAll(".selected").length) {
+			this.side.classList.add("et-side-empty");
+		}
 	}
 
 	positionAnnotations(e) {
@@ -134,19 +145,13 @@ class ExploratoryText {
 		annot.classList.toggle("et-less");
 	}
 
-	unselectAnnotation(annot) {
-		const index = annot.dataset.index,
-					highlight = this.highlights[index];
-		annot.classList.remove("selected");
-	}
-
 	init() {
 		const self = this,
 					sideInner = document.querySelector(".et-side-inner"),
 					highlightElems = this.block.querySelectorAll(".et-inner a"),
 					annotElems = document.querySelectorAll(".et-annot"),
 					pathElems = [];
-		let highlightIndex = 0;
+		let highlightIndex = 1;
 
 		annotElems.forEach((annot, i) => {
 			const annotBody = annot.querySelector(".et-annot-body"),
@@ -164,9 +169,9 @@ class ExploratoryText {
 					highlight.dataset.type = type;
 					highlight.dataset.index = highlightIndex;
 					annot.dataset.index = highlightIndex;
-					annotIndex.innerText = highlightIndex + 1;
-					self.annots.push(annot);
-					self.highlights.push(highlight);
+					annotIndex.innerText = highlightIndex;
+					self.annots[highlightIndex] = annot;
+					self.highlights[highlightIndex] = highlight;
 				}
 			});
 
@@ -217,9 +222,9 @@ class ExploratoryText {
 			} else {
 				if(textArr.length > 1) {
 					textArr[0] = "<span class='et-first'>"+textArr[0]+"</span>";
-					textArr[textLen-1] = "<span class='et-last' data-index-label='"+(highlightIndex + 1)+"'>"+textArr[textLen-1]+"</span>";
+					textArr[textLen-1] = "<span class='et-last' data-index-label='"+(highlightIndex)+"'>"+textArr[textLen-1]+"</span>";
 				} else {
-					textArr[0] = "<span class='et-first et-last' data-index-label='"+(highlightIndex + 1)+"'>"+textArr[0]+"</span>";
+					textArr[0] = "<span class='et-first et-last' data-index-label='"+(highlightIndex)+"'>"+textArr[0]+"</span>";
 				}
 				highlight.innerHTML = textArr.join(" ");
 			}
@@ -243,21 +248,21 @@ class ExploratoryText {
 		});
 
 		this.side.onscroll = function(e) {
-			self.makeConnections();
+			// self.makeConnections();
 		}
 
 		window.onscroll = function(e) {
 			self.positionAnnotations();
-			self.makeConnections();
+			// self.makeConnections();
 		}
 
 		window.onresize = function(e) {
 			self.positionAnnotations();
-			self.makeConnections();
+			// self.makeConnections();
 		}
 
 		this.positionAnnotations();
-		this.makeConnections();
+		// this.makeConnections();
 	}
 
 };

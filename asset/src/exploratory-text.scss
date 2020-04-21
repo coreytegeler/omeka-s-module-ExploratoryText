@@ -14,17 +14,67 @@ $entityLight: rgb(216, 225, 230);
 $primaryLight: rgb(245, 232, 176);
 $secondaryLight: rgb(242, 198, 190);
 
-$darkenAmount: 40%;
-$contextDark: darken($context, $darkenAmount);
-$entityDark: darken($entity, $darkenAmount);
-$primaryDark: darken($primary, $darkenAmount);
-$secondaryDark: darken($secondary, $darkenAmount);
+$lightenAmt: 10%;
+$contextLighter: lighten($contextLight, $lightenAmt);
+$entityLighter: lighten($entityLight, $lightenAmt);
+$primaryLighter: lighten($primaryLight, $lightenAmt);
+$secondaryLighter: lighten($secondaryLight, $lightenAmt);
+
+$darkenAmt: 40%;
+$contextDark: darken($context, $darkenAmt);
+$entityDark: darken($entity, $darkenAmt);
+$primaryDark: darken($primary, $darkenAmt);
+$secondaryDark: darken($secondary, $darkenAmt);
+
+
+@mixin colorHighlight($type, $color, $colorLight) {
+	&[data-type="#{$type}"] {
+		border-color: $color;
+		&, .et-last::after {
+			background-color: lighten($colorLight, $lightenAmt);
+			border-color: $color;
+			color: darken($color, $darkenAmt);
+		}
+		&:hover, &.selected {
+			&, .et-last::after {
+				background-color: $colorLight;
+			}
+		}
+	}
+}
+
+@mixin colorAnnot($type, $color, $colorLight) {
+	&[data-type="#{$type}"] {
+		color: $color;
+		.et-annot-inner {
+			border-color: $color;
+			background-color: lighten($colorLight, $lightenAmt);
+		}
+		.et-annot-inner::before {
+			border-color: $color;
+			color: darken($color, $darkenAmt);
+		}
+		* {
+			color: darken($color, $darkenAmt);
+		}
+		.et-annot-toolbar {
+			border-color: $color;
+			background-color: $colorLight;
+		}
+		.et-annot-index,
+		.et-annot-toggle,
+		.et-annot-close {
+			background-color: lighten($colorLight, $lightenAmt);
+		}
+	}
+}
 
 .exploratory-text-block {
 	position: relative;
 	border-top: 1px solid $dark;
 	background: $light;
 	svg {
+		display: none;
 		width: 100%;
 		height: 100%;
 		position: absolute;
@@ -78,6 +128,13 @@ $secondaryDark: darken($secondary, $darkenAmount);
 		}
 	}
 }
+.et-side-empty-note {
+	opacity: .5;
+	margin-top: 30px;
+	.et-side:not(.et-side-empty) & {
+		display: none;
+	}
+}
 @media screen and (max-width: 576px) {
 	.et-side, .et-side-inner {
 		height: 0 !important;
@@ -90,12 +147,17 @@ $secondaryDark: darken($secondary, $darkenAmount);
 	padding-top: 15px;
 	font-size: 1rem;
 	line-height: 1.3em;
+	@include colorAnnot("context", $secondary, $secondaryLight);
+	@include colorAnnot("entity", $entity, $entityLight);
+	@include colorAnnot("primary", $primary, $primaryLight);
+	@include colorAnnot("secondary", $secondary, $secondaryLight);
 	&:not(.selected) {
 		display: none;
 	}
 	&.et-less {
-		.et-annot-body {
-			max-height: 5rem;
+		.et-annot-inner {
+			max-height: 5.5rem;
+			overflow: hidden;
 		}
 		.et-annot-toggle div {
 			&:first-child {
@@ -108,8 +170,7 @@ $secondaryDark: darken($secondary, $darkenAmount);
 	}
 }
 .et-annot-toolbar {
-	margin: 0 -10px 10px -10px;
-	padding: 0 5px 5px 5px;
+	padding: 5px;
 	border-bottom: 1px solid;
 	display: flex;
 	font-size: .7rem;
@@ -134,17 +195,24 @@ $secondaryDark: darken($secondary, $darkenAmount);
 	}
 }
 .et-annot-inner {
-	padding: 5px 10px;
 	border-style: solid;
 	border-width: 1px;
 	border-radius: 5px;
+	overflow: hidden;
+}
+.et-annot-row {
+	padding: 5px 10px;
 }
 .et-annot-body {
 	overflow: hidden;
-	// &::before {
-	// 	margin: 0 5px 0 0;
-	// 	float: left;
-	// }
+}
+.et-annot-ref {
+	margin-top: 15px;
+	font-size: .75rem;
+	text-decoration: underline;
+	a:not(:hover) {
+		opacity: .75;
+	}
 }
 
 
@@ -176,9 +244,9 @@ $secondaryDark: darken($secondary, $darkenAmount);
 				bottom: 1em;
 			}
 		}
-		&:not(:hover) .et-last::after {
-			opacity: 0;
-		}
+		// &:not(:hover) .et-last::after {
+		// 	opacity: 0;
+		// }
 	}
 	.cke_editable {
 		line-height: 1.8em;
@@ -192,11 +260,11 @@ $secondaryDark: darken($secondary, $darkenAmount);
 .et-annot-index,
 .et-annot-toolbar button,
 .et-inner a .et-last::after {
-	width: 1.5em;
-	height: 1.5em;
+	width: 1rem;
+	height: 1rem;
 	display: block;
 	font-size: .75rem;
-	line-height: 1.4em;
+	line-height: 1.2em;
 	text-align: center;
 	border: 1px solid;
 	border-radius: 50%;
@@ -210,105 +278,10 @@ $secondaryDark: darken($secondary, $darkenAmount);
 	display: none !important;
 }
 
-.et-annot {
-	&[data-type="context"] {
-		color: $context;
-		.et-annot-inner {
-			border-color: $context;
-		}
-		.et-annot-inner::before {
-			border-color: $context;
-			color: $contextDark;
-		}
-		.et-annot-body, .et-annot-toolbar * {
-			color: $contextDark;
-		}
-	}
-	&[data-type="entity"] {
-		color: $entity;
-		.et-annot-inner {
-			border-color: $entity;
-		}
-		.et-annot-inner::before {
-			border-color: $entity;
-			color: $entityDark;
-		}
-		.et-annot-body, .et-annot-toolbar * {
-			color: $entityDark;
-		}
-	}
-	&[data-type="primary"] {
-		color: $primary;
-		.et-annot-inner {
-			border-color: $primary;
-		}
-		.et-annot-inner::before {
-			border-color: $primary;
-			color: $primaryDark;
-		}
-		.et-annot-body, .et-annot-toolbar * {
-			color: $primaryDark;
-		}
-	}
-	&[data-type="secondary"] {
-		color: $secondary;
-		.et-annot-inner {
-			border-color: $secondary;
-		}
-		.et-annot-inner::before {
-			border-color: $secondary;
-			color: $secondaryDark;
-		}
-		.et-annot-body, .et-annot-toolbar * {
-			color: $secondaryDark;
-		}
-	}
-}
-
 
 .et-inner a.et-highlight {
-	&[data-type="context"] {
-		border-color: $context;
-		&, .et-last::after {
-			background-color: $contextLight;
-			border-color: $context;
-			color: $contextDark;
-		}
-		&:hover, &.selected {
-			// background-color: saturate($contextLight, 25%);
-		}
-	}
-	&[data-type="entity"] {
-		border-color: $entity;
-		&, .et-last::after {
-			background-color: $entityLight;
-			border-color: $entity;
-			color: $entityDark;
-		}
-		&:hover, &.selected {
-			// background-color: saturate($entityLight, 25%);
-		}
-	}
-	&[data-type="primary"] {
-		border-color: $primary;
-		&, .et-last::after {
-			background-color: $primaryLight;
-			border-color: $primary;
-			color: $primaryDark;
-		}
-		&:hover, &.selected {
-			// background-color: saturate($primaryLight, 25%);
-		}
-	}
-	&[data-type="secondary"] {
-		border-color: $secondary;
-		&, .et-last::after {
-			background-color: $secondaryLight;
-			border-color: $secondary;
-			color: $secondaryDark;
-		}
-		&:hover, &.selected {
-			// background-color: saturate($primaryLight, 25%);
-		}
-	}
+	@include colorHighlight("context", $secondary, $secondaryLight);
+	@include colorHighlight("entity", $entity, $entityLight);
+	@include colorHighlight("primary", $primary, $primaryLight);
+	@include colorHighlight("secondary", $secondary, $secondaryLight);
 }
