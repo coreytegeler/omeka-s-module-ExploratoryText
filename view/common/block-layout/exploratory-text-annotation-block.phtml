@@ -14,19 +14,20 @@
 				</button>
 			</div>
 
-			<?php if( $reference && $reference['image'] ) { ?>
-				<div class="et-annot-images">
-					<?= $reference['image'] ?>
-				</div>
-			<?php	} ?>
+
+			<?php if( isset( $reference['image'] ) ) { ?>
+					<div class="et-annot-images">
+						<?= $reference['image'] ?>
+					</div>
+			<?php } ?>
 
 			<div class="et-annot-row et-annot-body">
 				<?= $block->dataValue( 'body' ); ?>
 			</div>
 
-			<?php if( $reference && $reference['link'] ) { ?>
+			<?php if( $reference && isset( $reference['link'] ) ) { ?>
 				<div class="et-annot-row et-annot-ref">
-					<?= $reference['link'] ?>
+					Read more: <?= $reference['link'] ?>
 				</div>
 			<?php } ?>
 

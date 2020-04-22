@@ -21,7 +21,13 @@ class ExploratoryText {
 		this.init();
 	}
 
+	getAnnot(index) {
+		return this.block.querySelector(".et-annot[data-index='"+index+"']");
+	}
 
+	getHighlight(index) {
+		return this.block.querySelectorAll(".et-highlight[data-index='"+index+"']");
+	}
 
 	drawConnection(context, highlight, annot, path) {
 		if(!highlight || !annot || !path) return;
@@ -60,37 +66,32 @@ class ExploratoryText {
 	// };
 
 	showConnection(index) {
-		let annot = this.annots[index],
-				highlight = this.highlights[index],
+		let annot = this.getAnnot(index),
+				highlight = this.getHighlight(index),
 				path = this.paths[index];
 
-		if(!annot) return;
-		if(!highlight) return;
-
-		if(!annot.classList.contains("selected")) return;
-		if(!highlight.classList.contains("selected")) return;
-		annot.classList.add("preview");
-		highlight.classList.add("preview");
-		// if(path) path.classed("preview", true);
+		if(annot) annot.classList.add("et-focus");
+		highlight.forEach(elem => elem.classList.add("et-focus"));
+		// if(path) path.classed("et-preview", true);
 		// this.makeConnections();
 	}
 
 	hideConnection(index) {
-		let annot = this.annots[index],
-				highlight = this.highlights[index],
+		let annot = this.getAnnot(index),
+				highlight = this.getHighlight(index),
 				path = this.paths[index];
 
-		// if(annot) annot.classList.remove("preview");
-		// if(highlight) highlight.classList.remove("preview");
-		// if(path) path.classed("preview", false);
+		if(annot) annot.classList.remove("et-focus");
+		highlight.forEach(elem => elem.classList.remove("et-focus"));
+		// if(path) path.classed("et-preview", false);
 		// this.makeConnections();
 	};
 
-	scrollTo(i) {
-		const annot = this.annots[i],
+	scrollTo(index) {
+		const annot = this.getAnnot(index),
 					nav = document.querySelector("nav.fixed"),
 					sideInner = this.block.querySelector(".et-side-inner");
-		if(!annot) return;
+		if(!annot.length) return;
 		const annotBounds = annot.getBoundingClientRect(),
 					sideBounds = sideInner.getBoundingClientRect(),
 					navBounds = nav.getBoundingClientRect();
@@ -100,26 +101,31 @@ class ExploratoryText {
 		});
 	}
 
-	selectAnnotation(index) {
-		let annot = this.annots[index],
-				highlight = this.highlights[index],
-				path = this.paths[index];
-		if(annot) annot.classList.add("selected");
-		if(highlight) highlight.classList.add("selected");
+	openAnnotation(index) {
+		const annot = this.getAnnot(index),
+					highlight = this.getHighlight(index),
+					path = this.paths[index];
+		
+		if(annot) annot.classList.add("et-open");
+		highlight.forEach(elem => elem.classList.add("et-open"));
 
 		this.scrollTo(index);
 		this.side.classList.remove("et-side-empty");
-		// this.makeConnections();
+		
+		this.showConnection(index);
 	}
 
-	unselectAnnotation(annot) {
-		const index = annot.dataset.index,
-					highlight = this.highlights[index];
-		annot.classList.remove("selected");
+	closeAnnotation(index) {
+		const annot = this.getAnnot(index),
+					highlight = this.getHighlight(index),
+					path = this.paths[index];
+		if(annot) annot.classList.remove("et-open");
+		highlight.forEach(elem => elem.classList.remove("et-open"));
 
-		if(!this.side.querySelectorAll(".selected").length) {
+		if(!this.side.querySelectorAll(".et-open").length) {
 			this.side.classList.add("et-side-empty");
 		}
+		this.hideConnection(index);
 	}
 
 	positionAnnotations(e) {
@@ -148,7 +154,7 @@ class ExploratoryText {
 	init() {
 		const self = this,
 					sideInner = document.querySelector(".et-side-inner"),
-					highlightElems = this.block.querySelectorAll(".et-inner a"),
+					highlightElems = this.block.querySelectorAll(".et-body a"),
 					annotElems = document.querySelectorAll(".et-annot"),
 					pathElems = [];
 		let highlightIndex = 1;
@@ -178,16 +184,16 @@ class ExploratoryText {
 			// annot.onclick = function(e) {
 			// 	e.preventDefault();
 			// 	let index = annot.dataset.index;
-			// 	self.selectAnnotation(index);
+			// 	self.openAnnotation(index);
 			// }
 
 			annot.onmouseover = function(e) {
-				let index = annot.dataset.index;
+				const index = annot.dataset.index;
 				self.showConnection(index);
 			}
 
 			annot.onmouseleave = function(e) {
-				let index = annot.dataset.index;
+				const index = annot.dataset.index;
 				self.hideConnection(index);
 			}
 
@@ -196,7 +202,8 @@ class ExploratoryText {
 			}
 
 			annotClose.onclick = function(e) {
-				self.unselectAnnotation(annot);
+				const index = annot.dataset.index;
+				self.closeAnnotation(index);
 			}
 
 			annot.classList.remove("hidden");
@@ -208,7 +215,7 @@ class ExploratoryText {
 
 			const type = highlight.dataset.type,
 						index = highlight.dataset.index,
-						annot = self.annots[index];
+						annot = self.getAnnot(index);
 			
 			if(annot) annot.classList.add(type);
 
@@ -232,7 +239,7 @@ class ExploratoryText {
 			highlight.onclick = function(e) {
 				e.preventDefault();
 				let index = highlight.dataset.index;
-				self.selectAnnotation(index);
+				self.openAnnotation(index);
 			}
 
 			highlight.onmouseover = function(e) {

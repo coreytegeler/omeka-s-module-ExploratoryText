@@ -5,50 +5,42 @@ $light: #f2f0df;
 $lighter: #fffbf8;
 
 $context: rgb(240, 77, 91);
-$entity: rgb(138, 179, 254);
+$entity: rgb(55, 125, 255);
 $primary: rgb(255, 205, 40);
 $secondary: rgb(240, 77, 91);
 
-$contextLight: rgb(242, 198, 190);
-$entityLight: rgb(216, 225, 230);
-$primaryLight: rgb(245, 232, 176);
-$secondaryLight: rgb(242, 198, 190);
-
-$lightenAmt: 10%;
-$contextLighter: lighten($contextLight, $lightenAmt);
-$entityLighter: lighten($entityLight, $lightenAmt);
-$primaryLighter: lighten($primaryLight, $lightenAmt);
-$secondaryLighter: lighten($secondaryLight, $lightenAmt);
-
+$lighterAmt: 30%;
+$lightAmt: 25%;
 $darkenAmt: 40%;
-$contextDark: darken($context, $darkenAmt);
-$entityDark: darken($entity, $darkenAmt);
-$primaryDark: darken($primary, $darkenAmt);
-$secondaryDark: darken($secondary, $darkenAmt);
 
 
-@mixin colorHighlight($type, $color, $colorLight) {
+
+@mixin colorHighlight($type, $color) {
 	&[data-type="#{$type}"] {
-		border-color: $color;
 		&, .et-last::after {
-			background-color: lighten($colorLight, $lightenAmt);
-			border-color: $color;
+			background-color: lighten($color, $lighterAmt);
 			color: darken($color, $darkenAmt);
 		}
-		&:hover, &.selected {
+		&:hover, &.et-open {
 			&, .et-last::after {
-				background-color: $colorLight;
+				border-color: $color;
+			}
+		}
+		&:hover, &.et-focus {
+			&, .et-last::after {
+				border-color: $color;
+				background-color: lighten($color, $lightAmt);
 			}
 		}
 	}
 }
 
-@mixin colorAnnot($type, $color, $colorLight) {
+@mixin colorAnnot($type, $color) {
 	&[data-type="#{$type}"] {
 		color: $color;
 		.et-annot-inner {
 			border-color: $color;
-			background-color: lighten($colorLight, $lightenAmt);
+			// background-color: lighten($color, $lighterAmt);
 		}
 		.et-annot-inner::before {
 			border-color: $color;
@@ -59,19 +51,24 @@ $secondaryDark: darken($secondary, $darkenAmt);
 		}
 		.et-annot-toolbar {
 			border-color: $color;
-			background-color: $colorLight;
+			background-color: lighten($color, $lighterAmt);
 		}
 		.et-annot-index,
 		.et-annot-toggle,
 		.et-annot-close {
-			background-color: lighten($colorLight, $lightenAmt);
+			background-color: lighten($color, $lightAmt);
+		}
+		&:hover, &.et-focus {
+			.et-annot-toolbar {
+				background-color: lighten($color, $lightAmt);
+			}
 		}
 	}
 }
 
 .exploratory-text-block {
 	position: relative;
-	border-top: 1px solid $dark;
+	border-top: 1px solid $highlight;
 	background: $light;
 	svg {
 		display: none;
@@ -83,10 +80,13 @@ $secondaryDark: darken($secondary, $darkenAmt);
 		z-index: 1;
 		path {
 			stroke: $dark;
-			&:not(.preview):not(.selected) {
+			&:not(.et-preview):not(.et-open) {
 				opacity: 0;
 			}
 		}
+	}
+	a {
+
 	}
 	p {
 		max-width: 750px;
@@ -96,10 +96,24 @@ $secondaryDark: darken($secondary, $darkenAmt);
 		}
 	}
 }
+.et-document-ref {
+	width: 100%;
+	margin-top: 2em;
+	padding-top: 2em;
+	border-top: 1px solid $highlight;
+	font-style: italic;
+	a {
+		text-decoration: underline;
+	}
+}
+
 .et-side {
 	width: 100%;
 	max-width: 20em;
 	position: relative;
+	&:not(.et-focus) {
+		opacity: .9;
+	}
 }
 .et-side-inner {
 	width: 100%;
@@ -147,11 +161,11 @@ $secondaryDark: darken($secondary, $darkenAmt);
 	padding-top: 15px;
 	font-size: 1rem;
 	line-height: 1.3em;
-	@include colorAnnot("context", $secondary, $secondaryLight);
-	@include colorAnnot("entity", $entity, $entityLight);
-	@include colorAnnot("primary", $primary, $primaryLight);
-	@include colorAnnot("secondary", $secondary, $secondaryLight);
-	&:not(.selected) {
+	@include colorAnnot("context", $secondary);
+	@include colorAnnot("entity", $entity);
+	@include colorAnnot("primary", $primary);
+	@include colorAnnot("secondary", $secondary);
+	&:not(.et-open) {
 		display: none;
 	}
 	&.et-less {
@@ -209,7 +223,9 @@ $secondaryDark: darken($secondary, $darkenAmt);
 .et-annot-ref {
 	margin-top: 15px;
 	font-size: .75rem;
-	text-decoration: underline;
+	a {
+		text-decoration: underline;
+	}
 	a:not(:hover) {
 		opacity: .75;
 	}
@@ -224,10 +240,10 @@ $secondaryDark: darken($secondary, $darkenAmt);
 	line-height: 1.8em;
 	a.et-highlight {
 		padding: 3px 6px;
-		border: 1px solid;
+		border: 1px solid transparent;
 		position: relative;
 		border-radius: 5px;
-		&:hover, &.selected, &.preview {
+		&:hover, &.et-open, &.et-preview {
 			cursor: pointer;
 			border-color: $dark;
 		}
@@ -242,6 +258,7 @@ $secondaryDark: darken($secondary, $darkenAmt);
 				position: absolute;
 				right: -1.25em;
 				bottom: 1em;
+				border-color: transparent;
 			}
 		}
 		// &:not(:hover) .et-last::after {
@@ -280,8 +297,8 @@ $secondaryDark: darken($secondary, $darkenAmt);
 
 
 .et-inner a.et-highlight {
-	@include colorHighlight("context", $secondary, $secondaryLight);
-	@include colorHighlight("entity", $entity, $entityLight);
-	@include colorHighlight("primary", $primary, $primaryLight);
-	@include colorHighlight("secondary", $secondary, $secondaryLight);
+	@include colorHighlight("context", $secondary);
+	@include colorHighlight("entity", $entity);
+	@include colorHighlight("primary", $primary);
+	@include colorHighlight("secondary", $secondary);
 }

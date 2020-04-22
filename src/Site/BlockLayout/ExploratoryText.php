@@ -43,6 +43,8 @@ class ExploratoryText extends AbstractBlockLayout
 			'class' => 'block-html full wysiwyg'
 		]);
 		$html .= '<div class="et-inner">' . $view->formRow($bodyInput) . '</div>';
+
+		$html .= $view->blockAttachmentsForm($block);
 		
 		return $html;
 
@@ -55,8 +57,19 @@ class ExploratoryText extends AbstractBlockLayout
 		$view->headScript()->appendFile( $view->assetUrl( 'exploratory-text.js', 'ExploratoryText' ), 'text/javascript' );
 
 
+		$reference = array();
+		$atchs = $block->attachments();
+		if( sizeof( $atchs ) ) {
+			$atch = $atchs[0];
+			$item = $atch->item();
+			if( $item ) {
+				$reference['link'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
+			}
+		}
+
 		return $view->partial( 'common/block-layout/exploratory-text-block', [
 			'block' => $block,
+			'reference' => $reference
 		]);
 	}
 }

@@ -65,7 +65,7 @@ const config = {
 		})
 	],
 	optimization: {
-		minimize: true,
+		minimize: env === 'build' ? true : false,
 		minimizer: [
 			new OptimizeCSSAssetsPlugin({}),
 			new TerserPlugin()

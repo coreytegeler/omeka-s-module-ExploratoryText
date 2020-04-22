@@ -72,6 +72,23 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 		]);
 		$html .= $view->formRow($bodyTextarea);
 
+		// $atchUsageSelect = new Select("o:block[__blockIndex__][o:data][atchUsage]");
+		// $atchUsageSelect->setOptions([
+		// 	'label' => 'Attachment Usage',
+		// 	'info' => '',
+		// ]);
+		// $atchUsageSelect->setValueOptions([
+		// 	null => '',
+		// 	'citation' => 'Citation',
+		// 	'image' => 'Image',
+		// 	'entity' => 'Entity',
+		// ]);
+		// $atchUsageValue = $block ? $block->dataValue('atchUsage') : null;
+		// $atchUsageSelect->setAttributes([
+		// 	'value' => $atchUsageValue
+		// ]);
+		// $html .= $view->formRow($atchUsageSelect);
+
 		$html .= $view->blockAttachmentsForm($block);
 		
 		return $html;
@@ -80,20 +97,33 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 
 	public function render( PhpRenderer $view, SitePageBlockRepresentation $block )
 	{
-		$attachments = $block->attachments();
+		$atchs = $block->attachments();
+		$atchUsage = $block->dataValue( 'atchUsage' );
 		$reference = array();
-		if( sizeof( $attachments ) ) {
-			$attachment = $attachments[0];
-			$item = $attachment->item();
-			if($item) {
-				$reference['link'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
 
-				$media = $attachment->media() ?: $item->primaryMedia();
+		if( sizeof( $atchs ) ) {
+			$atch = $atchs[0];
+			$item = $atch->item();
+			if( $item ) {
+				$reference['link'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
+				$media = $atch->media() ?: $item->primaryMedia();
 				if( $media ) {
 					$reference['image'] = $view->thumbnail( $media, 'medium' );
-					// $marker['filename'] = $media->displayTitle();
 				}
 			}
+			// switch( $atchUsage ) {
+			// 	case 'citation':
+
+			// 		break;
+			// 	case 'image':
+			// 		$media = $atch->media() ?: $item->primaryMedia();
+			// 		if( $media ) {
+			// 			$reference['image'] = $view->thumbnail( $media, 'medium' );
+			// 		}
+			// 		break;
+			// 	default:
+			// 		break;
+			// }
 		}
 
 		return $view->partial( 'common/block-layout/exploratory-text-annotation-block', [
