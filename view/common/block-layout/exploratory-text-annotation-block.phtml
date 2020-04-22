@@ -25,6 +25,12 @@
 				<?= $block->dataValue( 'body' ); ?>
 			</div>
 
+			<?php if( $block->dataValue( 'citation' ) ) { ?>
+				<div class="et-annot-row et-annot-ref">
+					<?= $block->dataValue( 'citation' ) ?>
+				</div>
+			<?php } ?>
+
 			<?php if( $reference && isset( $reference['link'] ) ) { ?>
 				<div class="et-annot-row et-annot-ref">
 					Read more: <?= $reference['link'] ?>

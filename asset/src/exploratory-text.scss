@@ -213,16 +213,24 @@ $darkenAmt: 40%;
 	border-width: 1px;
 	border-radius: 5px;
 	overflow: hidden;
+	padding-bottom: 5px;
 }
 .et-annot-row {
 	padding: 5px 10px;
 }
+.et-annot-images {
+	img {
+		display: table;
+	}
+}
 .et-annot-body {
-	overflow: hidden;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 .et-annot-ref {
-	margin-top: 15px;
+	// margin-top: 5px;
 	font-size: .75rem;
+	line-height: 1.2em;
 	a {
 		text-decoration: underline;
 	}

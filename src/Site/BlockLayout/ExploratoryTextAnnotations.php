@@ -72,6 +72,18 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 		]);
 		$html .= $view->formRow($bodyTextarea);
 
+		$citationTextarea = new Textarea( 'o:block[__blockIndex__][o:data][citation]' );
+		$citationTextarea->setOptions([
+			'label' => 'Citation',
+			'info' => '',
+		]);
+		$citationValue = $block ? $block->dataValue('citation') : null;
+		$citationTextarea->setAttributes([
+			'value' => $citationValue,
+			'class' => 'block-html full wysiwyg'
+		]);
+		$html .= $view->formRow($citationTextarea);
+
 		// $atchUsageSelect = new Select("o:block[__blockIndex__][o:data][atchUsage]");
 		// $atchUsageSelect->setOptions([
 		// 	'label' => 'Attachment Usage',
