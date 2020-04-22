@@ -17,17 +17,17 @@
 
 				<div class="et-body">
 					<?= $block->dataValue( 'body' ); ?>
-				</div>
 
-				<?php if( isset( $reference['link'] ) ) { ?>
 					<div class="et-document-ref">
-						View document: <?= $reference['link'] ?>
+						<?php if( isset( $reference['link'] ) ) { ?>
+							View document: <?= $reference['link'] ?>
+						<?php } ?>
 					</div>
-				<?php } ?>
+
+				</div>
 
 			</div>
 		</div>
-
 	</div>
 </div>
 <div class="col col-4"></div>

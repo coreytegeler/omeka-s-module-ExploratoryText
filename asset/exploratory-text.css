@@ -1,6 +1,7 @@
 .exploratory-text-block {
   position: relative;
-  border-top: 1px solid #0dae0b;
+  border: solid #0dae0b;
+  border-width: 1px 0;
   background: #f2f0df; }
   .exploratory-text-block svg {
     display: none;
@@ -20,11 +21,12 @@
     .exploratory-text-block p:last-of-type {
       margin: 0; }
 
+.et-body {
+  padding-bottom: 2em; }
+
 .et-document-ref {
   width: 100%;
-  margin-top: 2em;
   padding-top: 2em;
-  border-top: 1px solid #0dae0b;
   font-style: italic; }
   .et-document-ref a {
     text-decoration: underline; }

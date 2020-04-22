@@ -68,7 +68,8 @@ $darkenAmt: 40%;
 
 .exploratory-text-block {
 	position: relative;
-	border-top: 1px solid $highlight;
+	border: solid $highlight;
+	border-width: 1px 0;
 	background: $light;
 	svg {
 		display: none;
@@ -96,11 +97,14 @@ $darkenAmt: 40%;
 		}
 	}
 }
+
+.et-body {
+	padding-bottom: 2em;
+}
+
 .et-document-ref {
 	width: 100%;
-	margin-top: 2em;
 	padding-top: 2em;
-	border-top: 1px solid $highlight;
 	font-style: italic;
 	a {
 		text-decoration: underline;

@@ -226,13 +226,23 @@ class ExploratoryText {
   positionAnnotations(e) {
     const blockBounds = this.block.getBoundingClientRect(),
           navBounds = this.nav.getBoundingClientRect(),
-          sideBounds = this.side.getBoundingClientRect();
+          sideBounds = this.side.getBoundingClientRect(),
+          sideInnerBounds = this.sideInner.getBoundingClientRect();
     this.sideInner.style.width = sideBounds.width + "px";
     this.side.style.height = this.sideInner.scrollHeight + sideBounds.top + "px";
 
     if (blockBounds.y <= navBounds.height) {
-      this.sideInner.style.height = window.innerHeight - navBounds.height + "px";
-      ;
+      const body = this.block.querySelector(".et-body"),
+            bodyBounds = body.getBoundingClientRect();
+      let sideInnerHeight;
+
+      if (bodyBounds.bottom < window.innerHeight) {
+        sideInnerHeight = window.innerHeight - (window.innerHeight - bodyBounds.bottom) - navBounds.height;
+      } else {
+        sideInnerHeight = window.innerHeight - navBounds.height;
+      }
+
+      this.sideInner.style.height = sideInnerHeight + "px";
       this.sideInner.style.position = "fixed";
       this.sideInner.style.left = sideBounds.x + "px";
       this.sideInner.style.top = navBounds.height + "px";
