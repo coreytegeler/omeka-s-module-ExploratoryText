@@ -91,12 +91,13 @@ class ExploratoryText {
 		const annot = this.getAnnot(index),
 					nav = document.querySelector("nav.fixed"),
 					sideInner = this.block.querySelector(".et-side-inner");
-		if(!annot.length) return;
+		if(!annot) return;
 		const annotBounds = annot.getBoundingClientRect(),
 					sideBounds = sideInner.getBoundingClientRect(),
 					navBounds = nav.getBoundingClientRect();
+
 		sideInner.scrollBy({
-			top: annotBounds.top - navBounds.height,
+			top: annotBounds.top - sideBounds.top,
 			behavior: "smooth"
 		});
 	}
@@ -105,7 +106,6 @@ class ExploratoryText {
 		const annot = this.getAnnot(index),
 					highlight = this.getHighlight(index),
 					path = this.paths[index];
-		
 		if(annot) annot.classList.add("et-open");
 		highlight.forEach(elem => elem.classList.add("et-open"));
 
