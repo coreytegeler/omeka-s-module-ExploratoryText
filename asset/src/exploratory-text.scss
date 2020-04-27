@@ -1,5 +1,5 @@
 $dark: #072605;
-$medium: lighten($dark, 20%);
+$medium: #86857b;
 $highlight: #0dae0b;
 $light: #f2f0df;
 $lighter: #fffbf8;
@@ -11,7 +11,7 @@ $secondary: rgb(240, 77, 91);
 
 $lighterAmt: 30%;
 $lightAmt: 25%;
-$darkenAmt: 40%;
+$darkAmt: 40%;
 
 
 
@@ -19,7 +19,7 @@ $darkenAmt: 40%;
 	&[data-type="#{$type}"] {
 		&, .et-last::after {
 			background-color: lighten($color, $lighterAmt);
-			color: darken($color, $darkenAmt);
+			color: darken($color, $darkAmt);
 		}
 		&:hover, &.et-open {
 			&, .et-last::after {
@@ -44,10 +44,10 @@ $darkenAmt: 40%;
 		}
 		.et-annot-inner::before {
 			border-color: $color;
-			color: darken($color, $darkenAmt);
+			color: darken($color, $darkAmt);
 		}
 		* {
-			color: darken($color, $darkenAmt);
+			color: darken($color, $darkAmt);
 		}
 		.et-annot-toolbar {
 			border-color: $color;
@@ -101,6 +101,9 @@ $darkenAmt: 40%;
 .et-body {
 	padding-bottom: 2em;
 }
+.et-body-header {
+	padding-bottom: 30px;
+}
 
 .et-document-ref {
 	width: 100%;
@@ -146,9 +149,54 @@ $darkenAmt: 40%;
 		}
 	}
 }
+.et-side-key {
+	margin-top: 15px;
+	font-size: .75rem;
+	line-height: 1.2em;
+	color: $medium;
+	strong {
+		color: $dark;
+	}
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	li {
+		margin: 0 0 .5em 0;
+		// padding: 0 0 .5em 0;
+		// border-bottom: 1px solid $medium;
+		&::before {
+			content: '';
+			width: 1em;
+			height: 1em;
+			margin: 0 .25em -.2em 0;
+			display: inline-block;
+			border-radius: 50%;
+			border: 1px solid;
+		}
+		&.context::before {
+			background-color: lighten($context, $lightAmt);
+			border-color: darken($context, $darkAmt);
+		}
+		&.entity::before {
+			background-color: lighten($entity, $lightAmt);
+			border-color: darken($entity, $darkAmt);
+		}
+		&.primary::before {
+			background-color: lighten($primary, $lightAmt);
+			border-color: darken($primary, $darkAmt);
+		}
+		&.secondary::before {
+			background-color: lighten($secondary, $lightAmt);
+			border-color: darken($secondary, $darkAmt);
+		}
+	}
+}
 .et-side-empty-note {
-	opacity: .5;
-	margin-top: 30px;
+	color: $medium;
+	margin-top: 15px;
+	line-height: 1.3em;
 	.et-side:not(.et-side-empty) & {
 		display: none;
 	}

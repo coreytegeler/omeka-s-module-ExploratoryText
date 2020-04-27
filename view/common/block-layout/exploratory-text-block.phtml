@@ -5,6 +5,13 @@
 		<div class="col col-12 col-sm-4">
 			<div class="et-side et-side-empty">
 				<div class="et-side-inner">
+					<div class="et-side-key">
+						<ul>
+							<li class="entity"><strong>Person</strong><!-- : Biographical information for people</li> -->
+							<li class="context"><strong>Context</strong><!-- : Historical context for events or arguments</li> -->
+							<li class="primary"><strong>Primary source</strong><!-- : Commentary on thematic connections to other documents from the collection</li> -->
+						</ul>
+					</div>
 					<div class="et-side-empty-note">
 						<em>Nothing selected. Click on the highlighted text to view annotations.</em>
 					</div>
@@ -15,6 +22,12 @@
 		<div class="col col-12 col-sm-8">
 			<div class="et-inner row">
 
+				<?php if( isset( $reference['link'] ) ) { ?>
+					<div class="et-body-header">
+						<h2><?= $reference['link'] ?></h2>
+					</div>
+				<?php } ?>
+				
 				<div class="et-body">
 					<?= $block->dataValue( 'body' ); ?>
 
