@@ -117,7 +117,7 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 			$atch = $atchs[0];
 			$item = $atch->item();
 			if( $item ) {
-				$reference['link'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
+				$reference['title'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
 				$media = $atch->media() ?: $item->primaryMedia();
 				if( $media ) {
 					$reference['image'] = $view->thumbnail( $media, 'medium' );

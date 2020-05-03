@@ -64,7 +64,11 @@ class ExploratoryText extends AbstractBlockLayout
 			$atch = $atchs[0];
 			$item = $atch->item();
 			if( $item ) {
-				$reference['link'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
+				$reference['title'] = $item->displayTitle();
+				$reference['url'] = $item->url();
+				$reference['citation'] = $item->value( 'dcterms:bibliographicCitation' )->value();
+				$media = $atch->media() ?: $item->primaryMedia();
+				$reference['image'] = $media ? $view->thumbnail( $media, 'medium' ) : null;
 			}
 		}
 

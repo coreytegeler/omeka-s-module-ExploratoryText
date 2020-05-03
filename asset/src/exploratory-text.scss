@@ -105,13 +105,18 @@ $darkAmt: 40%;
 	padding-bottom: 30px;
 }
 
-.et-document-ref {
+.et-item-ref {
 	width: 100%;
-	padding-top: 2em;
+	padding-bottom: 2em;
 	font-style: italic;
 	a {
 		text-decoration: underline;
 	}
+}
+.et-item-ref-cite {
+	padding-top: 1rem;
+	font-size: .75rem;
+	line-height: 1.2em;
 }
 
 .et-side {

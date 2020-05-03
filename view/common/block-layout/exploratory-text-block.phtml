@@ -22,21 +22,35 @@
 		<div class="col col-12 col-sm-8">
 			<div class="et-inner row">
 
-				<?php if( isset( $reference['link'] ) ) { ?>
+				<?php if( isset( $reference['title'] ) ) { ?>
 					<div class="et-body-header">
-						<h2><?= $reference['link'] ?></h2>
+						<h2><?= $reference['title'] ?></h2>
 					</div>
 				<?php } ?>
 				
 				<div class="et-body">
 					<?= $block->dataValue( 'body' ); ?>
+				</div>
 
-					<div class="et-document-ref">
-						<?php if( isset( $reference['link'] ) ) { ?>
-							View document: <?= $reference['link'] ?>
+				<div class="et-item-ref row">
+					<div class="col col-12 col-sm-4">
+						<?php if( isset( $reference['url'] ) ) { ?>
+							<a href="<?= $reference['url'] ?>" target="_blank">
+								<?= $reference['image']; ?>
+							</a>
 						<?php } ?>
 					</div>
-
+					<div class="col col-12 col-sm-8">
+						<?php if( isset( $reference['title'] ) ) { ?>
+							<div class="et-item-ref-link">
+								View scanned document:
+								<a href="<?= $reference['url'] ?>" target="_blank"><?= $reference['title'] ?></a>
+							</div>
+							<div class="et-item-ref-cite">
+								<cite><?= $reference['citation'] ?></cite>
+							</div>
+						<?php } ?>
+					</div>
 				</div>
 
 			</div>
