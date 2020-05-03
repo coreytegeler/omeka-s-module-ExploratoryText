@@ -25,7 +25,7 @@ class ExploratoryText extends AbstractBlockLayout
 
 	public function prepareForm( PhpRenderer $view )
 	{
-		$view->headLink()->appendStylesheet( $view->assetUrl( 'exploratory-text.css', 'ExploratoryText') );
+		$view->headLink()->appendStylesheet( $view->assetUrl( 'exploratory-text.css?version='.$ver, 'ExploratoryText') );
 	}
 
 	public function form( PhpRenderer $view, SiteRepresentation $site, SitePageRepresentation $page = null, SitePageBlockRepresentation $block = null
@@ -52,9 +52,10 @@ class ExploratoryText extends AbstractBlockLayout
 
 	public function render( PhpRenderer $view, SitePageBlockRepresentation $block )
 	{
-		$view->headLink()->appendStylesheet( $view->assetUrl( 'exploratory-text.css', 'ExploratoryText' ) );
+		$ver = 1.0;
+		$view->headLink()->appendStylesheet( $view->assetUrl( 'exploratory-text.css?version='.$ver, 'ExploratoryText' ) );
 		$view->headScript()->appendFile( 'https://d3js.org/d3.v5.min.js', 'text/javascript' );
-		$view->headScript()->appendFile( $view->assetUrl( 'exploratory-text.js', 'ExploratoryText' ), 'text/javascript' );
+		$view->headScript()->appendFile( $view->assetUrl( 'exploratory-text.js?version='.$ver, 'ExploratoryText' ), 'text/javascript' );
 
 
 		$reference = array();
