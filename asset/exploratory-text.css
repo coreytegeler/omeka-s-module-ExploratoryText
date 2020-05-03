@@ -115,7 +115,8 @@
   .et-annot[data-type="context"] {
     color: #f04d5b; }
     .et-annot[data-type="context"] .et-annot-inner {
-      border-color: #f04d5b; }
+      border-color: #f04d5b;
+      background-color: rgba(240, 77, 91, 0.06); }
     .et-annot[data-type="context"] .et-annot-inner::before {
       border-color: #f04d5b;
       color: #680911; }
@@ -133,7 +134,8 @@
   .et-annot[data-type="entity"] {
     color: #377dff; }
     .et-annot[data-type="entity"] .et-annot-inner {
-      border-color: #377dff; }
+      border-color: #377dff;
+      background-color: rgba(55, 125, 255, 0.06); }
     .et-annot[data-type="entity"] .et-annot-inner::before {
       border-color: #377dff;
       color: #00256a; }
@@ -151,7 +153,8 @@
   .et-annot[data-type="primary"] {
     color: #ffcd28; }
     .et-annot[data-type="primary"] .et-annot-inner {
-      border-color: #ffcd28; }
+      border-color: #ffcd28;
+      background-color: rgba(255, 205, 40, 0.06); }
     .et-annot[data-type="primary"] .et-annot-inner::before {
       border-color: #ffcd28;
       color: #5b4600; }
@@ -169,7 +172,8 @@
   .et-annot[data-type="secondary"] {
     color: #f04d5b; }
     .et-annot[data-type="secondary"] .et-annot-inner {
-      border-color: #f04d5b; }
+      border-color: #f04d5b;
+      background-color: rgba(240, 77, 91, 0.06); }
     .et-annot[data-type="secondary"] .et-annot-inner::before {
       border-color: #f04d5b;
       color: #680911; }

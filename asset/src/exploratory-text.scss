@@ -40,7 +40,7 @@ $darkAmt: 40%;
 		color: $color;
 		.et-annot-inner {
 			border-color: $color;
-			// background-color: lighten($color, $lighterAmt);
+			background-color: rgba($color, .06);
 		}
 		.et-annot-inner::before {
 			border-color: $color;
