@@ -71,6 +71,11 @@ $darkAmt: 40%;
 	border: solid $highlight;
 	border-width: 1px 0;
 	background: $light;
+	hr {
+		border-style: solid;
+		border-color: $medium;
+		border-width: 1px;
+	}
 	svg {
 		display: none;
 		width: 100%;
@@ -107,7 +112,9 @@ $darkAmt: 40%;
 
 .et-item-ref {
 	width: 100%;
-	padding-bottom: 2em;
+	padding: 2em 0;
+	margin-top: 2em;
+	border-top: 1px solid $medium;
 	font-style: italic;
 	a {
 		text-decoration: underline;

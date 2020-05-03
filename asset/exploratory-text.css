@@ -3,6 +3,10 @@
   border: solid #0dae0b;
   border-width: 1px 0;
   background: #f2f0df; }
+  .exploratory-text-block hr {
+    border-style: solid;
+    border-color: #86857b;
+    border-width: 1px; }
   .exploratory-text-block svg {
     display: none;
     width: 100%;
@@ -29,7 +33,9 @@
 
 .et-item-ref {
   width: 100%;
-  padding-bottom: 2em;
+  padding: 2em 0;
+  margin-top: 2em;
+  border-top: 1px solid #86857b;
   font-style: italic; }
   .et-item-ref a {
     text-decoration: underline; }
