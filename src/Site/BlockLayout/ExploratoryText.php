@@ -57,9 +57,9 @@ class ExploratoryText extends AbstractBlockLayout
 		$atchs = $block->attachments();
 		if( sizeof( $atchs ) ) {
 			$atch = $atchs[0];
-			if( $atch ) {
+			if( is_object( $atch ) ) {
 				$item = $atch->item();
-				if( $item ) {
+				if( is_object( $item ) ) {
 					$reference['title'] = $item->displayTitle();
 					$reference['url'] = $item->url();
 					$reference['citation'] = $item->value( 'dcterms:bibliographicCitation' )->value();
