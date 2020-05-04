@@ -47,7 +47,7 @@ class ExploratoryText extends AbstractBlockLayout
 
 	public function render( PhpRenderer $view, SitePageBlockRepresentation $block )
 	{
-		$ver = 1.1;
+		$ver = 1.2;
 		$view->headLink()->appendStylesheet( $view->assetUrl( 'exploratory-text.css?version='.$ver, 'ExploratoryText' ) );
 		$view->headScript()->appendFile( 'https://d3js.org/d3.v5.min.js', 'text/javascript' );
 		$view->headScript()->appendFile( $view->assetUrl( 'exploratory-text.js?version='.$ver, 'ExploratoryText' ), 'text/javascript' );
@@ -58,7 +58,7 @@ class ExploratoryText extends AbstractBlockLayout
 		if( sizeof( $atchs ) ) {
 			$atch = $atchs[0];
 			$item = $atch->item();
-			if( $item ) {
+			if( is_object( $item ) ) {
 				$reference['title'] = $item->displayTitle();
 				$reference['url'] = $item->url();
 				$reference['citation'] = $item->value( 'dcterms:bibliographicCitation' )->value();

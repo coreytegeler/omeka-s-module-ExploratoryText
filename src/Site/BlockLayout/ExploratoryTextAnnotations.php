@@ -112,27 +112,16 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 
 		if( sizeof( $atchs ) ) {
 			$atch = $atchs[0];
-			$item = $atch->item();
-			if( $item ) {
-				$reference['title'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
-				$media = $atch->media() ?: $item->primaryMedia();
-				if( $media ) {
-					$reference['image'] = $view->thumbnail( $media, 'medium' );
+			if( is_object( $atch ) ) {
+				$item = $atch->item();
+				if( is_object( $item ) ) {
+					$reference['title'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
+					$media = $atch->media() ?: $item->primaryMedia();
+					if( $media ) {
+						$reference['image'] = $view->thumbnail( $media, 'medium' );
+					}
 				}
 			}
-			// switch( $atchUsage ) {
-			// 	case 'citation':
-
-			// 		break;
-			// 	case 'image':
-			// 		$media = $atch->media() ?: $item->primaryMedia();
-			// 		if( $media ) {
-			// 			$reference['image'] = $view->thumbnail( $media, 'medium' );
-			// 		}
-			// 		break;
-			// 	default:
-			// 		break;
-			// }
 		}
 
 		return $view->partial( 'common/block-layout/exploratory-text-annotation-block', [

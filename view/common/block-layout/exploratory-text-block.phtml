@@ -28,8 +28,8 @@
 
 				<div class="et-item-ref row">
 					<div class="col col-12 col-sm-4">
-						<?php if( isset( $reference['url'] ) && isset( $reference['image'] ) ) { ?>
-							<a href="<?= $reference['url'] ?>" target="_blank">
+						<?php if( isset( $reference['image'] ) ) { ?>
+							<a href="<?= isset( $reference['url'] ) ? $reference['url'] : '' ?>" target="_blank">
 								<?= $reference['image']; ?>
 							</a>
 						<?php } ?>
@@ -38,15 +38,19 @@
 						<?php if( isset( $reference['title'] ) ) { ?>
 							<div class="et-item-ref-link">
 								View scanned document:
-								<a href="<?= $reference['url'] ?>" target="_blank"><?= $reference['title'] ?></a>
+								<a href="<?= isset( $reference['url']) ? $reference['url'] : '' ?>" target="_blank">
+									<?= $reference['title'] ?>
+								</a>
 							</div>
+						<?php } ?>
+						<?php if( isset( $reference['citation'] ) ) { ?>
 							<div class="et-item-ref-cite">
 								<cite><?= $reference['citation'] ?></cite>
 							</div>
 						<?php } ?>
 					</div>
 				</div>
-
+				
 			</div>
 		</div>
 	</div>
