@@ -33,12 +33,22 @@
 
 .et-item-ref {
   width: 100%;
-  padding: 2em 0;
-  margin-top: 2em;
-  border-top: 1px solid #86857b;
-  font-style: italic; }
+  padding: 15px 0;
+  margin: 2em 0;
+  border: 1px solid #86857b;
+  border-radius: 5px;
+  font-style: italic;
+  line-height: 1.1;
+  background-color: rgba(134, 133, 123, 0.2); }
   .et-item-ref a {
     text-decoration: underline; }
+  .et-item-ref .et-item-ref-image {
+    overflow: hidden;
+    display: table;
+    border: 1px solid #86857b;
+    border-radius: 5px; }
+    .et-item-ref .et-item-ref-image img {
+      display: table; }
 
 .et-item-ref-cite {
   padding-top: 1rem;

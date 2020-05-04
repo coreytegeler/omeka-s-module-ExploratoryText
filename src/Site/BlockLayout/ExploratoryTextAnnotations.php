@@ -112,9 +112,9 @@ class ExploratoryTextAnnotations extends AbstractBlockLayout
 
 		if( sizeof( $atchs ) ) {
 			$atch = $atchs[0];
-			if( is_object( $atch ) ) {
+			if( $atch ) {
 				$item = $atch->item();
-				if( is_object( $item ) ) {
+				if( $item ) {
 					$reference['title'] = $item->link( $item->displayTitle(), null, array( 'target' => '_blank' ) );
 					$media = $atch->media() ?: $item->primaryMedia();
 					if( $media ) {

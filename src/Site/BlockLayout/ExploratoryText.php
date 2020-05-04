@@ -47,7 +47,7 @@ class ExploratoryText extends AbstractBlockLayout
 
 	public function render( PhpRenderer $view, SitePageBlockRepresentation $block )
 	{
-		$ver = 1.2;
+		$ver = 1.3;
 		$view->headLink()->appendStylesheet( $view->assetUrl( 'exploratory-text.css?version='.$ver, 'ExploratoryText' ) );
 		$view->headScript()->appendFile( 'https://d3js.org/d3.v5.min.js', 'text/javascript' );
 		$view->headScript()->appendFile( $view->assetUrl( 'exploratory-text.js?version='.$ver, 'ExploratoryText' ), 'text/javascript' );
@@ -57,13 +57,15 @@ class ExploratoryText extends AbstractBlockLayout
 		$atchs = $block->attachments();
 		if( sizeof( $atchs ) ) {
 			$atch = $atchs[0];
-			$item = $atch->item();
-			if( is_object( $item ) ) {
-				$reference['title'] = $item->displayTitle();
-				$reference['url'] = $item->url();
-				$reference['citation'] = $item->value( 'dcterms:bibliographicCitation' )->value();
-				$media = $atch->media() ?: $item->primaryMedia();
-				$reference['image'] = $media ? $view->thumbnail( $media, 'medium' ) : null;
+			if( $atch ) {
+				$item = $atch->item();
+				if( $item ) {
+					$reference['title'] = $item->displayTitle();
+					$reference['url'] = $item->url();
+					$reference['citation'] = $item->value( 'dcterms:bibliographicCitation' )->value();
+					$media = $atch->media() ?: $item->primaryMedia();
+					$reference['image'] = $media ? $view->thumbnail( $media, 'medium' ) : null;
+				}
 			}
 		}
 
