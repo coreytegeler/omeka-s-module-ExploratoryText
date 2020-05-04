@@ -7,8 +7,8 @@
 				<div class="et-side-inner">
 					<div class="et-side-key">
 						<ul>
-							<li class="entity"><strong>Person</strong><!-- : Biographical information for people</li> -->
-							<li class="context"><strong>Context</strong><!-- : Historical context for events or arguments</li> -->
+							<li class="context"><strong>Additional context</strong><!-- : Historical context for events or arguments</li> -->
+							<li class="entity"><strong>Person or institution</strong><!-- : Biographical information for people</li> -->
 							<li class="primary"><strong>Primary source</strong><!-- : Commentary on thematic connections to other documents from the collection</li> -->
 						</ul>
 					</div>
@@ -22,11 +22,11 @@
 		<div class="col col-12 col-sm-8">
 			<div class="et-inner row">
 
-				<?php if( isset( $reference['title'] ) ) { ?>
-					<div class="et-body-header">
-						<h2><?= $reference['title'] ?></h2>
-					</div>
-				<?php } ?>
+				<?#php if( isset( $reference['title'] ) ) { ?>
+				<!-- 	<div class="et-body-header">
+						<h2><?#= $reference['title'] ?></h2>
+					</div> -->
+				<?#php } ?>
 				
 				<div class="et-body">
 					<?= $block->dataValue( 'body' ); ?>
@@ -34,7 +34,7 @@
 
 				<div class="et-item-ref row">
 					<div class="col col-12 col-sm-4">
-						<?php if( isset( $reference['url'] ) ) { ?>
+						<?php if( isset( $reference['url'] ) && isset( $reference['image'] ) ) { ?>
 							<a href="<?= $reference['url'] ?>" target="_blank">
 								<?= $reference['image']; ?>
 							</a>
